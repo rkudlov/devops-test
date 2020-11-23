@@ -1,0 +1,5 @@
+---
+- hosts: puppet_master
+  roles:
+    - sync_manifests
+  become: yes

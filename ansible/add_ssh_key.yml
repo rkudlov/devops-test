@@ -1,0 +1,4 @@
+---
+- hosts: puppet
+  roles:
+    - add_ssh_key

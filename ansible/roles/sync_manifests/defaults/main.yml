@@ -1,0 +1,2 @@
+manifests_local_path: ../../../puppet/
+manifests_remote_path: /etc/puppetlabs/code/environments/development/

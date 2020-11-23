@@ -1,0 +1,14 @@
+---
+- name: Make sure remote path exist
+  file:
+    path: "{{ manifests_remote_path }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '755'
+
+- name: Copy manifests to master
+  copy:
+    src: "{{ manifests_local_path }}"
+    dest: "{{ manifests_remote_path }}"
+
