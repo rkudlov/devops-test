@@ -1,0 +1,12 @@
+puppet_server_package: puppetserver
+puppet_agent_package: puppet-agent
+puppet_repository_url: "https://apt.puppetlabs.com/puppet7-release-{{ ansible_distribution_release }}.deb"
+puppet_repository_key_url: "https://apt.puppetlabs.com/DEB-GPG-KEY-puppet-20250406"
+universe_repositories:
+  - "deb http://archive.ubuntu.com/ubuntu/ {{ ansible_distribution_release }} universe"
+  - "deb http://archive.ubuntu.com/ubuntu/ {{ ansible_distribution_release  }}-updates universe"
+  - "deb http://security.ubuntu.com/ubuntu/ {{ ansible_distribution_release }}-security universe"
+puppet_bin_path: /opt/puppetlabs/bin/
+puppet_server_service: puppetserver
+puppet_agent_service: puppet
+puppet_config_path: /etc/puppetlabs/puppet

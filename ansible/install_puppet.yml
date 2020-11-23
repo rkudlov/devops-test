@@ -1,0 +1,5 @@
+---
+- hosts: puppet
+  roles:
+    - install_puppet
+  become: yes

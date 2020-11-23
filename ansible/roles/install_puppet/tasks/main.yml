@@ -1,0 +1,88 @@
+---
+- name: Install dependencies
+  apt:
+    update_cache: yes
+    name:
+      - gnupg2
+      - apt-transport-https
+      - ca-certificates
+      - xz-utils
+    state: present
+
+- name: Enable universe repository
+  apt_repository:
+    repo: "{{ item }}"
+  loop: "{{ universe_repositories }}"
+
+- name: Add puppet repo apt key
+  apt_key:
+    url: "{{ puppet_repository_key_url }}"
+    state: present
+
+- name: Add puppet repository
+  apt:
+    deb: "{{ puppet_repository_url }}"
+    state: present
+
+
+- name: Work over master
+  block:
+    - name: Install puppet server
+      apt:
+        update_cache: yes
+        name: "{{ puppet_server_package }}"
+        state: present
+
+    - name: Add puppet agents to /etc/hosts
+      lineinfile: dest=/etc/hosts regexp='.*{{ item }}$' line="{{ hostvars[item]['ansible_host'] }} {{ item }}" state=present
+      when: hostvars[item]['ansible_host'] is defined
+      loop: "{{ groups['puppet_agent'] }}"
+
+    - name: Add puppet master to /etc/hosts
+      lineinfile: dest=/etc/hosts line="127.0.0.1 puppet" state=present
+
+    - name: Create puppet master config
+      template:
+        src: puppet_server_config.j2
+        dest: "{{ puppet_config_path }}/puppet.conf"
+
+    - name: Start puppet service and enable on boot
+      service:
+        name: "{{ puppet_server_service }}"
+        state: started
+        enabled: yes
+
+  when: is_puppet_master is defined
+
+- name: Work over agents
+  block:
+    - name: Install puppet agent
+      apt:
+        update_cache: yes
+        name: "{{ puppet_agent_package }}"
+        state: present
+
+    - name: Add puppet master to /etc/hosts
+      lineinfile: dest=/etc/hosts regexp='.*{{ item }}$' line="{{ hostvars[item]['ansible_host'] }} puppet {{ item }}" state=present
+      when: hostvars[item]['ansible_host'] is defined
+      loop: "{{ groups['puppet_master'] }}"
+
+    - name: Create puppet agent config
+      template:
+        src: puppet_agent_config.j2
+        dest: "{{ puppet_config_path }}/puppet.conf"
+
+    - name: Start puppet service and enable on boot
+      service:
+        name: "{{ puppet_agent_service }}"
+        state: started
+        enabled: yes
+
+  when: is_puppet_agent is defined
+
+
+
+
+
+
+
