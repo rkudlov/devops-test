@@ -1,0 +1,4 @@
+- hosts: puppet_master
+  roles:
+    - postgresql
+  become: yes

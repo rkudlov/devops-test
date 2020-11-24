@@ -4,3 +4,11 @@ server = puppet
 runinterval = 1h
 strict_variables = true
 
+[master]
+storeconfigs = true
+storeconfigs_backend = puppetdb
+
+[agent]
+splay = true
+environment = development
+

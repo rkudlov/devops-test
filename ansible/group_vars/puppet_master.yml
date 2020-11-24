@@ -1,1 +1,24 @@
 is_puppet_master: true
+postgresql_databases:
+  - name: puppetdb
+    owner: puppetdb
+postgresql_ext_install_contrib: true
+postgresql_database_extensions:
+  - db: puppetdb
+    extensions:
+      - pg_trgm
+
+postgresql_user_privileges:
+  - name: puppetdb
+    db: puppetdb
+    priv: "ALL"
+    role_attr_flags: "CREATEDB"
+
+postgresql_users:
+  - name: puppetdb
+    pass: md53cbf124486f5dca866b9eb0d6a3bb314
+    encrypted: yes
+
+postgresql_ssl: false
+postgresql_pgtune: false
+postgresql_ext_install_postgis: false

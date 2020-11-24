@@ -1,0 +1,3 @@
+[submodule "ansible/roles/postgresql"]
+	path = ansible/roles/postgresql
+	url = https://github.com/rkudlov/postgresql
